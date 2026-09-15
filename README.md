@@ -1,16 +1,17 @@
-# Malaria Diagnosis Expert System — CSC 520 Group Project
+# Malaria Diagnosis Expert System - CSC 520 Group Project
 
-A rule-based expert system with Certainty Factors (CF) for malaria
-diagnosis decision support, built with Python (Flask).
+A rule-based expert system that uses Certainty Factors (CFs) to provide
+malaria diagnosis decision support. The application is built with Python
+and Flask.
 
-## How to run
+## Running the application
 
 ```
-pip install flask
+pip install -r requirements.txt
 python3 app.py
 ```
 
-Then open **http://localhost:5050** in a browser.
+After the application starts, open **http://localhost:5050** in a browser.
 
 ## Project structure
 
@@ -26,8 +27,7 @@ malaria_expert_system/
     └── style.css
 ```
 
-This structure mirrors the four classic expert-system components, which
-you should reference directly in your report:
+This structure represents the four classic expert-system components:
 
 | Component | File |
 |---|---|
@@ -36,7 +36,7 @@ you should reference directly in your report:
 | User interface | `templates/`, `static/` |
 | Explanation facility | `result.html` (lists every rule that fired and its CF) |
 
-## How the reasoning works
+## Reasoning process
 
 1. The user checks off symptoms/risk factors in the form.
 2. `inference_engine.infer()` checks every rule in `knowledge_base.py`.
@@ -50,9 +50,9 @@ you should reference directly in your report:
    CF_combined = CF1 + CF2 * (1 - CF1)
    ```
 
-   applied iteratively across all fired rules. This means each additional
-   confirming symptom increases confidence, with diminishing returns as
-   the CF approaches 1.0 (100%) — it can never mathematically exceed 1.0.
+  applied iteratively across all fired rules. This means each additional
+  confirming symptom increases confidence, with diminishing returns as
+  the CF approaches 1.0 (100%); it cannot mathematically exceed 1.0.
 4. The final CF is mapped to one of three bands:
    - **≥ 75%** → High likelihood → urgent RDT/microscopy recommended
    - **40%–74%** → Moderate likelihood → testing recommended
@@ -60,7 +60,7 @@ you should reference directly in your report:
 5. The result page lists every rule that fired, in descending order of
    contribution — this is the explanation facility.
 
-## Knowledge base design notes (for your report)
+## Knowledge base design
 
 - **11 base rules**: one per individual symptom/risk factor (e.g. fever,
   chills, recent travel).
@@ -73,18 +73,23 @@ you should reference directly in your report:
   higher; headache and fatigue are weighted lower since they overlap
   heavily with other common illnesses).
 - Compound rules intentionally note where a pattern overlaps with a
-  differential diagnosis (e.g. fever + headache + vomiting also suggests
-  typhoid), which is an important limitation to discuss in your report.
+  differential diagnosis. For example, fever + headache + vomiting may also
+  indicate typhoid. This overlap is an important limitation of the system.
 
-## Suggested extensions if you have time before the deadline
+## Testing and validation
 
-- Add a small test suite (`test_cases.py`) running 5–10 labeled cases and
-  reporting how many the system classifies correctly, for a "Testing &
-  Validation" section in your report.
-- Add a `/about` page describing system limitations and the disclaimer.
-- Export each diagnosis session's inputs+outputs as a CSV log.
+The project includes `test_cases.py`, a validation script containing 11
+hand-labeled cases. The script runs each case through the inference engine
+and reports the resulting classification, expected classification, and
+overall accuracy.
 
-## Limitations (state clearly in the report)
+Run the validation script with:
+
+```
+python3 test_cases.py
+```
+
+## Limitations
 
 This is an educational decision-support tool. It does **not** replace a
 Rapid Diagnostic Test (RDT), microscopy, or clinical evaluation by a
