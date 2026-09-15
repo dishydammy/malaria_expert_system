@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malaria Diagnosis Expert System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="page">
+    <div class="masthead">
+      <p class="tag">CSC 520 Group Project</p>
+      <h1>Malaria Diagnosis Expert System</h1>
+    </div>
+
+    <div class="disclaimer">
+      This tool gives a decision-support estimate based on reported symptoms
+      and risk factors. It does not replace a Rapid Diagnostic Test (RDT),
+      microscopy, or clinical evaluation.
+    </div>
+
+    <form action="/diagnose" method="POST">
+      {% for group_name, symptoms in groups %}
+      <fieldset>
+        <legend>{{ group_name }}</legend>
+        {% for s in symptoms %}
+        <label class="option">
+          <input type="checkbox" name="symptoms" value="{{ s.id }}">
+          {{ s.label }}
+        </label>
+        {% endfor %}
+      </fieldset>
+      {% endfor %}
+
+      <div class="submit-row">
+        <button type="submit">Run Diagnosis</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

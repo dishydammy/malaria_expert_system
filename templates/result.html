@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnosis Result — Malaria Expert System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="page">
+    <div class="masthead">
+      <p class="tag">CSC 520 Group Project</p>
+      <h1>Diagnosis Result</h1>
+    </div>
+
+    <div class="result-card {{ result.level }}">
+      <div class="cf-stat">
+        <div class="cf-number">{{ result.cf_percent }}%</div>
+        <div class="cf-label {{ result.level }}">{{ result.label }}</div>
+      </div>
+      <p style="color: var(--ink-soft); font-size: 14.5px; margin: 0;">
+        Combined certainty factor from {{ result.fired_rules|length }} matched
+        rule(s), based on {{ selected_count }} reported symptom(s)/risk factor(s).
+      </p>
+
+      <div class="advice-box {{ result.level }}">
+        {{ result.advice }}
+      </div>
+    </div>
+
+    {% if selected_labels %}
+    <div class="section-title">Reported symptoms &amp; risk factors</div>
+    <p class="symptom-list">{{ selected_labels|join(', ') }}</p>
+    {% endif %}
+
+    <div class="section-title">Explanation — why the system reached this conclusion</div>
+    {% if result.fired_rules %}
+      {% for r in result.fired_rules %}
+      <div class="rule-item">
+        <span class="rule-cf">CF {{ r.cf }}</span>
+        <span class="rule-id">{{ r.id }}</span>{{ r.text }}
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="symptom-list">No rules matched — no symptoms or risk factors were selected.</p>
+    {% endif %}
+
+    <a class="back-link" href="/">&larr; Start a new diagnosis</a>
+  </div>
+</body>
+</html>
